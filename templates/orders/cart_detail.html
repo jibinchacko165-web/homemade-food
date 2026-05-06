@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card" style="max-width: 900px; margin: 0 auto; padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-lg);">
-    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--border);">
+<div class="card responsive-card" style="max-width: 900px; margin: 0 auto; box-shadow: var(--shadow-lg);">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 2px dashed var(--border);">
         <div style="width: 50px; height: 50px; background: rgba(255,107,107,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-cart-shopping" style="font-size: 1.5rem; color: var(--primary);"></i>
         </div>
-        <h2 style="font-size: 2rem; color: var(--dark); margin: 0; letter-spacing: -0.5px;">Your Cart</h2>
+        <h2 style="font-size: clamp(1.5rem, 5vw, 2rem); color: var(--dark); margin: 0; letter-spacing: -0.5px;">Your Cart</h2>
     </div>
     
     {% if cart_items %}
-        <div style="background: var(--light); border-radius: 16px; overflow: hidden; margin-bottom: 2.5rem;">
+        <div class="table-responsive" style="background: var(--light); border-radius: 16px; margin-bottom: 2.5rem;">
             <table style="width: 100%; border-collapse: collapse;">
                 <thead style="background: rgba(0,0,0,0.02);">
                     <tr style="text-align: left; color: var(--dark-light); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
@@ -52,17 +52,17 @@
             </table>
         </div>
         
-        <div style="display: flex; flex-direction: column; align-items: flex-end; padding: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: 16px;">
-            <div style="display: flex; justify-content: space-between; width: 100%; max-width: 300px; margin-bottom: 1.5rem; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: flex-end; padding: clamp(1.5rem, 4vw, 2rem); background: var(--white); border: 1px solid var(--border); border-radius: 16px; width: 100%;">
+            <div style="display: flex; justify-content: space-between; width: 100%; max-width: 400px; margin-bottom: 1.5rem; align-items: center; gap: 1rem;">
                 <span style="color: var(--dark-light); font-size: 1.1rem;">Total Amount:</span>
-                <span style="font-size: 2rem; font-weight: 800; color: var(--primary);">₹{{ total_price }}</span>
+                <span style="font-size: clamp(1.5rem, 6vw, 2rem); font-weight: 800; color: var(--primary);">₹{{ total_price }}</span>
             </div>
             
-            <div style="display: flex; gap: 1rem;">
-                <a href="{% url 'chef:home' %}" class="btn btn-outline" style="padding: 0.8rem 1.5rem;">
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; width: 100%; justify-content: flex-end;">
+                <a href="{% url 'chef:home' %}" class="btn btn-outline" style="flex: 1; min-width: 200px; white-space: nowrap;">
                     <i class="fa-solid fa-arrow-left"></i> Continue Shopping
                 </a>
-                <a href="{% url 'checkout' %}" class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1.1rem;">
+                <a href="{% url 'checkout' %}" class="btn btn-primary" style="flex: 1; min-width: 200px; font-size: 1.1rem; white-space: nowrap;">
                     Checkout <i class="fa-solid fa-credit-card" style="margin-left: 0.5rem;"></i>
                 </a>
             </div>

@@ -27,19 +27,19 @@
 </div>
 {% endif %}
 
-<div class="hero" style="text-align: center; margin-bottom: 4rem; padding: 6rem 3rem; background: linear-gradient(135deg, rgba(222, 184, 135, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, rgba(255, 215, 0, 0.08) 100%); border-radius: 32px; position: relative; overflow: hidden; box-shadow: inset 0 0 50px rgba(210, 105, 30, 0.05);">
+<div class="hero" style="text-align: center; margin-bottom: 4rem; padding: clamp(3rem, 10vw, 6rem) clamp(1rem, 5vw, 3rem); background: linear-gradient(135deg, rgba(222, 184, 135, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, rgba(255, 215, 0, 0.08) 100%); border-radius: 32px; position: relative; overflow: hidden; box-shadow: inset 0 0 50px rgba(210, 105, 30, 0.05);">
     <!-- Natural lighting effects -->
     <div style="position: absolute; top: -60px; left: -60px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, rgba(255, 127, 80, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(40px); animation: float 6s ease-in-out infinite;"></div>
     <div style="position: absolute; bottom: -80px; right: -80px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(244, 164, 96, 0.15) 0%, rgba(210, 105, 30, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(50px); animation: float 8s ease-in-out infinite reverse;"></div>
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 248, 220, 0.3) 0%, rgba(245, 222, 179, 0.2) 40%, transparent 70%); border-radius: 50%; filter: blur(60px);"></div>
 
-    <h1 style="font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -1px; position: relative; z-index: 1; text-shadow: 0 4px 8px rgba(210, 105, 30, 0.2);">
+    <h1 style="font-size: clamp(2rem, 8vw, 4rem); font-weight: 900; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -1px; position: relative; z-index: 1; text-shadow: 0 4px 8px rgba(210, 105, 30, 0.2);">
         Fresh <span style="color: var(--warm-orange);">Homemade</span> Delights
     </h1>
     <div style="display: inline-block; background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 248, 220, 0.8) 100%); padding: 0.8rem 2rem; border-radius: 50px; box-shadow: var(--shadow-warm); margin-bottom: 2rem; position: relative; z-index: 1; backdrop-filter: blur(10px); border: 1px solid rgba(244, 164, 96, 0.3);">
-        <span style="font-weight: 700; color: var(--primary); font-size: 1.3rem;"><i class="fa-solid fa-kitchen-set" style="margin-right: 0.5rem;"></i>{{ time_message }}</span>
+        <span style="font-weight: 700; color: var(--primary); font-size: clamp(1rem, 3vw, 1.3rem);"><i class="fa-solid fa-kitchen-set" style="margin-right: 0.5rem;"></i>{{ time_message }}</span>
     </div>
-    <p style="font-size: 1.4rem; color: var(--dark); max-width: 700px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.6; font-weight: 500;">
+    <p style="font-size: clamp(1rem, 4vw, 1.4rem); color: var(--dark); max-width: 700px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.6; font-weight: 500;">
         {% if current_category %}
             <i class="fa-solid fa-heart" style="color: var(--warm-orange); margin-right: 0.5rem;"></i>
             Savor our chef's special {{ current_category|lower }} creations! Made with love, served fresh from our kitchen to your table.
@@ -50,7 +50,7 @@
     </p>
 </div>
 
-<div class="food-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2.5rem;">
+<div class="responsive-grid">
     {% for food in foods %}
     <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 24px; border: none; box-shadow: var(--shadow-warm); position: relative; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 220, 0.9) 100%); backdrop-filter: blur(10px); transition: var(--transition); transform: translateY(0);">
         <!-- Warm lighting effect -->
