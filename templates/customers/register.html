@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Join Our Kitchen - Homemade Food{% endblock %}
+{% block title %}Sign Up - Homemade Food{% endblock %}
 
 {% block content %}
 <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh; padding: 2rem 0;">
@@ -13,7 +13,7 @@
             <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(210, 105, 30, 0.15) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 8px 24px rgba(139, 69, 19, 0.15);">
                 <i class="fa-solid fa-utensils" style="font-size: 2rem; color: var(--primary); filter: drop-shadow(0 2px 4px rgba(139, 69, 19, 0.2));"></i>
             </div>
-            <h2 style="font-weight: 900; font-size: 2.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Join Our Kitchen</h2>
+            <h2 style="font-weight: 900; font-size: 2.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Sign Up</h2>
             <p style="color: var(--dark-light); font-size: 1.1rem; font-weight: 500;">Become part of our community of food lovers and chefs</p>
         </div>
 
@@ -22,11 +22,9 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                 {% for field in form %}
-                <div class="form-group" style="{% if field.name == 'is_seller' or field.name == 'address' %}grid-column: 1 / -1;{% endif %} margin-bottom: 1.5rem;">
+                <div class="form-group" style="{% if field.name == 'address' %}grid-column: 1 / -1;{% endif %} margin-bottom: 1.5rem;">
                     <label for="{{ field.id_for_label }}" style="font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; display: block;">
-                        {% if field.name == 'is_seller' %}
-                            <i class="fa-solid fa-chef-hat" style="margin-right: 0.5rem; color: var(--accent);"></i>
-                        {% elif field.name == 'phone_number' %}
+                        {% if field.name == 'phone_number' %}
                             <i class="fa-solid fa-phone" style="margin-right: 0.5rem; color: var(--secondary);"></i>
                         {% elif field.name == 'address' %}
                             <i class="fa-solid fa-map-marker-alt" style="margin-right: 0.5rem; color: var(--warm-orange);"></i>
@@ -48,12 +46,12 @@
             </div>
 
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1.2rem; font-size: 1.2rem; font-weight: 700; box-shadow: 0 8px 25px rgba(210, 105, 30, 0.3);">
-                <i class="fa-solid fa-user-plus"></i> Start Cooking
+                <i class="fa-solid fa-user-plus"></i> Sign Up
             </button>
         </form>
 
         <p style="text-align: center; margin-top: 2.5rem; font-size: 1rem; color: var(--dark-light); position: relative; z-index: 1;">
-            Already a chef? <a href="{% url 'customers:login' %}" style="color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); border-bottom: 2px solid transparent; padding-bottom: 0.1rem;">Welcome Back</a>
+            Already have an account? <a href="{% url 'customers:login' %}" style="color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); border-bottom: 2px solid transparent; padding-bottom: 0.1rem;">Welcome Back</a>
         </p>
     </div>
 </div>

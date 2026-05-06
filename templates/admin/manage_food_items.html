@@ -46,7 +46,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <form action="{% url 'admin:toggle_food_availability' food.id %}" method="post" style="display:inline;">
+                            <form action="{% url 'management:toggle_food_availability' food.id %}" method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn {% if food.is_available %}btn-outline{% else %}btn-primary{% endif %}" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
                                     {% if food.is_available %}Mark Unavailable{% else %}Mark Available{% endif %}

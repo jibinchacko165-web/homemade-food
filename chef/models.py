@@ -7,7 +7,7 @@ class FoodItem(models.Model):
         ('Breakfast', 'Breakfast (6:00 AM - 12:00 PM)'),
         ('Lunch', 'Lunch (12:00 PM - 3:30 PM)'),
         ('Snacks', 'Snacks (3:30 PM - 6:30 PM)'),
-        ('Dinner', 'Dinner (6:30 PM - 10:00 PM)'),
+        ('Dinner', 'Dinner (6:30 PM - 3:00 AM)'),
     )
     
     chef = models.ForeignKey(

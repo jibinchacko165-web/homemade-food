@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = 'customers.CustomUser'
-LOGIN_URL = 'login'
+LOGIN_URL = 'customers:login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -68,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'food_system.middleware.NoCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'food_system.urls'

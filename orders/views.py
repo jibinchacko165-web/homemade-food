@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Order, OrderItem
 from chef.models import FoodItem
 
 def is_seller(user):
-    return user.is_authenticated and user.is_seller
+    return user.is_authenticated and user.is_chef
 
 @login_required
 def add_to_cart(request, food_id):
@@ -15,7 +16,7 @@ def add_to_cart(request, food_id):
     else:
         cart[str(food_id)] = {'price': str(food.price), 'quantity': 1, 'name': food.name}
     request.session['cart'] = cart
-    return redirect('cart_detail')
+    return redirect('orders:cart_detail')
 
 @login_required
 def cart_detail(request):
@@ -51,13 +52,19 @@ def remove_from_cart(request, food_id):
     if str(food_id) in cart:
         del cart[str(food_id)]
         request.session['cart'] = cart
-    return redirect('cart_detail')
+    return redirect('orders:cart_detail')
 
 @login_required
 def checkout(request):
+    if request.method != 'POST':
+        return redirect('orders:cart_detail')
+        
     cart = request.session.get('cart', {})
     if not cart:
-        return redirect('home')
+        return redirect('chef:home')
+        
+    delivery_date = request.POST.get('delivery_date')
+    delivery_time = request.POST.get('delivery_time')
     
     # Recalculate total safely
     total_price = 0
@@ -73,9 +80,14 @@ def checkout(request):
             
     if not valid_items:
         request.session['cart'] = {}
-        return redirect('home')
+        return redirect('chef:home')
         
-    order = Order.objects.create(customer=request.user, total_price=total_price)
+    order = Order.objects.create(
+        customer=request.user, 
+        total_price=total_price,
+        delivery_date=delivery_date,
+        delivery_time=delivery_time
+    )
     
     for food, item in valid_items:
         OrderItem.objects.create(
@@ -87,7 +99,7 @@ def checkout(request):
     
     # clear cart
     request.session['cart'] = {}
-    return redirect('order_history')
+    return redirect('orders:order_history')
 
 @login_required
 def order_history(request):
@@ -97,7 +109,7 @@ def order_history(request):
 @user_passes_test(is_seller)
 def seller_orders(request):
     # Sellers see orders containing their foods
-    orders = Order.objects.filter(items__food_item__seller=request.user).distinct().order_by('-created_at')
+    orders = Order.objects.filter(items__food_item__chef=request.user).distinct().order_by('-created_at')
     return render(request, 'orders/seller_orders.html', {'orders': orders})
 
 @user_passes_test(is_seller)
@@ -108,12 +120,25 @@ def update_order_status(request, order_id):
         if status in dict(Order.STATUS_CHOICES):
             order.status = status
             order.save()
-    return redirect('seller_orders')
+    return redirect('orders:seller_orders')
 
 @login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     # Check permission
-    if order.customer != request.user and not request.user.is_seller:
-        return redirect('home')
+    if order.customer != request.user and not request.user.is_chef:
+        return redirect('chef:home')
     return render(request, 'orders/order_detail.html', {'order': order})
+
+@login_required
+def check_new_orders(request):
+    if not request.user.is_chef:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+    count = Order.objects.filter(items__food_item__chef=request.user, status='Pending').distinct().count()
+    return JsonResponse({'pending_count': count})
+
+@login_required
+def check_order_status(request):
+    orders = Order.objects.filter(customer=request.user).exclude(status='Completed').exclude(status='Cancelled')
+    status_dict = {str(o.id): o.status for o in orders}
+    return JsonResponse({'statuses': status_dict})

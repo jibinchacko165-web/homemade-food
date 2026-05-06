@@ -20,7 +20,7 @@ class CustomerRegistrationForm(UserCreationForm):
     
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username', 'email', 'phone_number', 'address', 'password1', 'password2')
+        fields = UserCreationForm.Meta.fields + ('email', 'phone_number', 'address')
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Choose a username'}),
         }
@@ -52,7 +52,7 @@ class ChefRegistrationForm(UserCreationForm):
     
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username', 'email', 'phone_number', 'address', 'password1', 'password2')
+        fields = UserCreationForm.Meta.fields + ('email', 'phone_number', 'address', 'is_seller')
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business name'}),
         }

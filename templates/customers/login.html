@@ -13,7 +13,7 @@
             <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(210, 105, 30, 0.1) 0%, rgba(244, 164, 96, 0.15) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 8px 24px rgba(210, 105, 30, 0.15);">
                 <i class="fa-solid fa-kitchen-set" style="font-size: 2rem; color: var(--primary); filter: drop-shadow(0 2px 4px rgba(210, 105, 30, 0.2));"></i>
             </div>
-            <h2 style="font-weight: 900; font-size: 2.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Welcome Back, Chef!</h2>
+            <h2 style="font-weight: 900; font-size: 2.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Welcome Back!</h2>
             <p style="color: var(--dark-light); font-size: 1.1rem; font-weight: 500;">Login to access your favorite homemade dishes</p>
         </div>
 
@@ -31,13 +31,11 @@
             </div>
             {% endfor %}
             <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1.2rem; font-size: 1.2rem; font-weight: 700; box-shadow: 0 8px 25px rgba(210, 105, 30, 0.3);">
-                <i class="fa-solid fa-utensils"></i> Enter the Kitchen
+                <i class="fa-solid fa-right-to-bracket"></i> Login
             </button>
         </form>
 
-        <p style="text-align: center; margin-top: 2.5rem; font-size: 1rem; color: var(--dark-light); position: relative; z-index: 1;">
-            New to our kitchen? <a href="{% url 'customers:register' %}" style="color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); border-bottom: 2px solid transparent; padding-bottom: 0.1rem;">Join as a Chef</a>
-        </p>
+            New to our kitchen? <a href="{% url 'customers:register' %}" style="color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); border-bottom: 2px solid transparent; padding-bottom: 0.1rem;">Create an Account</a>
     </div>
 </div>
 

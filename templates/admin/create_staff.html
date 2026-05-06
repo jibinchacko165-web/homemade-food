@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Staff - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 75vh; padding: 2rem;">
+    <div class="card" style="width: 100%; max-width: 500px; padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-lg);">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="width: 70px; height: 70px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fa-solid fa-user-shield" style="font-size: 2rem; color: var(--primary);"></i>
+            </div>
+            <h2 class="section-title">Add New Staff</h2>
+            <p class="section-subtitle">Create accounts for Chefs or Administrators.</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="{{ field.id_for_label }}" style="font-weight: 600; margin-bottom: 0.5rem; display: block;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div style="color: var(--warm-orange); font-size: 0.9rem; margin-top: 0.4rem;">
+                    {{ field.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1rem;">
+                <i class="fa-solid fa-plus"></i> Create Account
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="{% url 'management:manage_users' %}" style="color: var(--dark-light); text-decoration: none; font-size: 0.9rem;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Users
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+    .form-group input:focus, .form-group select:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+    }
+</style>
+{% endblock %}

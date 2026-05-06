@@ -8,6 +8,7 @@ urlpatterns = [
     path('management/', include('management.urls')),  # Custom admin dashboard
     path('', include('chef.urls')),  # Food listing & chef dashboard
     path('customers/', include('customers.urls')),  # Customer auth
+    path('users/', include('customers.urls')),  # Legacy redirect for common usage
     path('orders/', include('orders.urls')),
 ]
 

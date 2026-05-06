@@ -8,7 +8,7 @@ from .models import CustomUser
 
 def customer_register(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('chef:home')
     
     if request.method == 'POST':
         form = CustomerRegistrationForm(request.POST)
@@ -19,7 +19,7 @@ def customer_register(request):
                 user.save()
                 messages.success(request, f'Account created successfully! Welcome {user.username}!')
                 login(request, user)
-                return redirect('home')
+                return redirect('chef:home')
             except Exception as e:
                 messages.error(request, f'An error occurred: {str(e)}')
         else:
@@ -34,7 +34,7 @@ def customer_register(request):
 
 def customer_login(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('chef:home')
     
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
@@ -45,8 +45,18 @@ def customer_login(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Welcome back, {user.username}!')
-                next_url = request.GET.get('next', 'home')
-                return redirect(next_url)
+                
+                # Role-based redirection
+                next_url = request.GET.get('next')
+                if next_url:
+                    return redirect(next_url)
+                
+                if user.role == 'admin' or user.is_superuser:
+                    return redirect('management:dashboard')
+                elif user.role == 'chef':
+                    return redirect('chef:dashboard')
+                else:
+                    return redirect('chef:home')
             else:
                 messages.error(request, 'Invalid username or password.')
         else:
@@ -59,10 +69,7 @@ def customer_login(request):
 
 @login_required
 def customer_profile(request):
-    if not request.user.role == 'customer':
-        messages.error(request, 'Access denied.')
-        return redirect('home')
-    
+
     updated = False
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)

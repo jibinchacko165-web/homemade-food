@@ -5,12 +5,17 @@
 {% block content %}
 <div class="admin-container">
     <div class="section-header">
-        <h1 class="section-title">Admin Dashboard</h1>
+        <h1 class="section-title">Admin: {{ user.username }}</h1>
         <p class="section-subtitle">Overview of system statistics and recent activity.</p>
     </div>
 
     <!-- Stats Grid -->
-    <div class="food-grid" style="margin-bottom: 3rem;">
+    <div class="food-grid" style="margin-bottom: 3rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div class="card" style="text-align: center; border-bottom: 4px solid #28a745;">
+            <i class="fa-solid fa-indian-rupee-sign" style="font-size: 2.5rem; color: #28a745; margin-bottom: 1rem;"></i>
+            <h3>₹{{ stats.total_revenue }}</h3>
+            <p>Total Revenue</p>
+        </div>
         <div class="card" style="text-align: center; border-bottom: 4px solid var(--primary);">
             <i class="fa-solid fa-users" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 1rem;"></i>
             <h3>{{ stats.total_users }}</h3>
@@ -33,12 +38,54 @@
         </div>
     </div>
 
+    <!-- Analytics Section -->
+    <div class="form-row" style="margin-bottom: 3rem;">
+        <!-- Revenue Chart -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-chart-line"></i> Monthly Revenue</h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Top Dishes -->
+        <div class="card">
+            <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-trophy" style="color: #ffd700;"></i> Top Selling Dishes</h3>
+            <div class="table-responsive">
+                <table class="table-striped">
+                    <thead>
+                        <tr>
+                            <th>Dish</th>
+                            <th>Chef</th>
+                            <th>Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dish in top_dishes %}
+                        <tr>
+                            <td><strong>{{ dish.food_item__name }}</strong></td>
+                            <td>{{ dish.food_item__chef__username }}</td>
+                            <td><span class="badge badge-completed">{{ dish.total_sold }}</span></td>
+                            <td>₹{{ dish.revenue }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" style="text-align: center;">No sales data available yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="form-row">
         <!-- Recent Orders -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3><i class="fa-solid fa-receipt"></i> Recent Orders</h3>
-                <a href="{% url 'admin:manage_orders' %}" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">View All</a>
+                <a href="{% url 'management:manage_orders' %}" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">View All</a>
             </div>
             <div class="table-responsive">
                 <table class="table-striped">
@@ -76,7 +123,7 @@
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3><i class="fa-solid fa-user-clock"></i> New Users</h3>
-                <a href="{% url 'admin:manage_users' %}" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Manage All</a>
+                <a href="{% url 'management:manage_users' %}" class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">Manage All</a>
             </div>
             <div class="table-responsive">
                 <table class="table-striped">
@@ -105,4 +152,51 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('revenueChart').getContext('2d');
+    const months = JSON.parse('{{ chart_months|escapejs }}');
+    const revenues = JSON.parse('{{ chart_revenues|escapejs }}');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: months.length ? months : ['No Data'],
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: revenues.length ? revenues : [0],
+                borderColor: '#d2691e',
+                backgroundColor: 'rgba(210, 105, 30, 0.1)',
+                borderWidth: 3,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#d2691e',
+                pointRadius: 5,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '₹' + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
 {% endblock %}

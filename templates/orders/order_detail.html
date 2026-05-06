@@ -8,9 +8,14 @@
             <span style="color: var(--dark-light);"><i class="fa-regular fa-calendar"></i> {{ order.created_at|date:"F d, Y, g:i a" }}</span>
         </div>
         <div style="text-align: right;">
-            <span class="badge {% if order.status == 'Pending' %}badge-pending{% elif order.status == 'Completed' %}badge-completed{% else %}badge-cancelled{% endif %}" style="font-size: 1rem; padding: 0.5rem 1rem;">
+            <span class="badge {% if order.status == 'Pending' %}badge-pending{% elif order.status == 'Completed' %}badge-completed{% else %}badge-cancelled{% endif %}" style="font-size: 1rem; padding: 0.5rem 1rem; margin-bottom: 0.5rem; display: inline-block;">
                 {{ order.status }}
             </span>
+            {% if order.delivery_date %}
+            <div style="color: var(--primary); font-size: 0.9rem; font-weight: 600;">
+                <i class="fa-solid fa-clock"></i> Delivery: {{ order.delivery_date|date:"M d, Y" }} at {{ order.delivery_time|time:"g:i a" }}
+            </div>
+            {% endif %}
         </div>
     </div>
     
@@ -40,7 +45,7 @@
     </div>
     
     <div style="text-align: center;">
-        <a href="{% url 'order_history' %}" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to History</a>
+        <a href="{% url 'orders:order_history' %}" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to History</a>
     </div>
 </div>
 {% endblock %}

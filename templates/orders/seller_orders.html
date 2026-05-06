@@ -19,7 +19,7 @@
                         <span style="font-size: 0.9rem; color: var(--dark-light);">Customer: {{ order.customer.username }} • {{ order.created_at|date:"M d, g:i A" }}</span>
                     </div>
                     
-                    <form action="{% url 'update_order_status' order.id %}" method="post" style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; max-width: 300px; justify-content: flex-end;">
+                    <form action="{% url 'orders:update_order_status' order.id %}" method="post" style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; width: 100%; max-width: 300px; justify-content: flex-end;">
                         {% csrf_token %}
                         <select name="status" style="flex: 1; min-width: 120px; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border); background: var(--white); font-weight: 600; outline: none; cursor: pointer;">
                             <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>

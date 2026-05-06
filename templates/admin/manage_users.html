@@ -9,6 +9,10 @@
             <h1 class="section-title">Manage Users</h1>
             <p class="section-subtitle">View and manage all registered users in the system.</p>
         </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <a href="{% url 'management:create_staff' %}" class="btn btn-primary">
+                <i class="fa-solid fa-user-plus"></i> Add New Staff
+            </a>
         <div class="filter-box" style="width: 100%; max-width: 400px;">
             <form method="get" style="display: flex; gap: 0.5rem; width: 100%;">
                 <select name="role" class="form-group" style="margin-bottom: 0; padding: 0.7rem; flex: 1;">
@@ -59,7 +63,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <form action="{% url 'admin:toggle_user_status' user.id %}" method="post" style="display:inline;">
+                            <form action="{% url 'management:toggle_user_status' user.id %}" method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn {% if user.is_active %}btn-outline{% else %}btn-primary{% endif %}" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
                                     {% if user.is_active %}Deactivate{% else %}Activate{% endif %}

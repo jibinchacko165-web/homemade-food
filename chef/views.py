@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.utils import timezone
 from zoneinfo import ZoneInfo
 from datetime import time
+from customers.models import CustomUser
+from orders.models import Order
 from .models import FoodItem, ChefProfile
 from .forms import FoodItemForm
 
@@ -13,16 +15,16 @@ def get_current_category():
     ist = ZoneInfo('Asia/Kolkata')
     now = timezone.now().astimezone(ist).time()
     
-    if time(6, 0) <= now < time(12, 0):
+    if time(18, 30) <= now or now < time(3, 0):
+        return 'Dinner', 'Dinner Time (6:30 PM - 3:00 AM)'
+    elif time(6, 0) <= now < time(12, 0):
         return 'Breakfast', 'Breakfast Time (6:00 AM - 12:00 PM)'
     elif time(12, 0) <= now < time(15, 30):
         return 'Lunch', 'Lunch Time (12:00 PM - 3:30 PM)'
     elif time(15, 30) <= now < time(18, 30):
         return 'Snacks', 'Snacks Time (3:30 PM - 6:30 PM)'
-    elif time(18, 30) <= now <= time(23, 59):
-        return 'Dinner', 'Dinner Time (6:30 PM - 10:00 PM)'
     else:
-        return None, 'Kitchen Closed'
+        return None, 'Kitchen Closed (3:00 AM - 6:00 AM)'
 
 
 def food_list(request):
@@ -57,7 +59,7 @@ def is_chef(user):
 def chef_dashboard(request):
     if not is_chef(request.user):
         messages.error(request, 'Access denied. Only chefs can access this.')
-        return redirect('home')
+        return redirect('chef:home')
     
     food_items = FoodItem.objects.filter(chef=request.user)
     try:
@@ -65,12 +67,28 @@ def chef_dashboard(request):
     except ChefProfile.DoesNotExist:
         chef_profile = ChefProfile.objects.create(chef=request.user)
     
+    orders = Order.objects.filter(items__food_item__chef=request.user).distinct().order_by('-created_at')
+    recent_orders = orders[:5]
+    
     context = {
-        'food_items': food_items,
-        'chef_profile': chef_profile,
         'total_items': food_items.count(),
+        'total_orders': orders.count(),
+        'pending_orders': orders.filter(status='Pending').count(),
     }
     return render(request, 'chef/dashboard.html', context)
+
+
+@login_required
+def chef_menu(request):
+    if not is_chef(request.user):
+        messages.error(request, 'Access denied. Only chefs can access this.')
+        return redirect('chef:home')
+    
+    food_items = FoodItem.objects.filter(chef=request.user)
+    context = {
+        'food_items': food_items,
+    }
+    return render(request, 'chef/chef_menu.html', context)
 
 
 @login_required

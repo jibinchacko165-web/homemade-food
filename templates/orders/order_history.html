@@ -6,7 +6,7 @@
         <div style="width: 50px; height: 50px; background: rgba(78,205,196,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-clock-rotate-left" style="font-size: 1.5rem; color: var(--secondary);"></i>
         </div>
-        <h2 style="font-size: clamp(1.5rem, 5vw, 2rem); color: var(--dark); margin: 0; letter-spacing: -0.5px;">Your Orders</h2>
+        <h2 style="font-size: clamp(1.5rem, 5vw, 2rem); color: var(--dark); margin: 0; letter-spacing: -0.5px;">User: {{ user.username }} - Your Orders</h2>
     </div>
     
     {% if orders %}
@@ -67,4 +67,48 @@
         </div>
     {% endif %}
 </div>
+
+<script type="application/json" id="active-orders-data">
+    {
+    {% for order in orders %}
+        {% if order.status != 'Completed' and order.status != 'Cancelled' %}
+            "{{ order.id }}": "{{ order.status }}"{% if not forloop.last %},{% endif %}
+        {% endif %}
+    {% endfor %}
+    }
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentStatuses = {};
+    try {
+        currentStatuses = JSON.parse(document.getElementById('active-orders-data').textContent);
+    } catch(e) {
+        console.error(e);
+    }
+    
+    // Only poll if there are active orders
+    if (Object.keys(currentStatuses).length > 0) {
+        setInterval(function() {
+            fetch("{% url 'orders:check_order_status' %}")
+                .then(response => response.json())
+                .then(data => {
+                    let changed = false;
+                    for (let id in currentStatuses) {
+                        if (data.statuses[id] && data.statuses[id] !== currentStatuses[id]) {
+                            changed = true;
+                            break;
+                        }
+                    }
+                    if (changed) {
+                        showToast("Your order status has been updated!", "clipboard-check", "var(--secondary)");
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                    }
+                })
+                .catch(error => console.error("Error checking status:", error));
+        }, 10000); // Check every 10 seconds
+    }
+});
+</script>
 {% endblock %}

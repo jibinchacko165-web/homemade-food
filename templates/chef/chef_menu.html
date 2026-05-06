@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 2rem auto; padding: 0 1rem;">
+    <!-- Header -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; margin-bottom: 3rem; background: var(--white); padding: 2.5rem; border-radius: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border);">
+        <div>
+            <h2 style="font-size: 2.5rem; color: var(--dark); margin: 0; font-weight: 800;">Chef Menu</h2>
+            <p style="color: var(--dark-light); font-size: 1.1rem; margin-top: 0.5rem;">Manage your delicious recipes from here.</p>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <a href="{% url 'chef:add_food' %}" class="btn btn-primary" style="padding: 1rem 1.8rem; font-size: 1.1rem; font-weight: 700;">
+                <i class="fa-solid fa-plus"></i> Add New Dish
+            </a>
+        </div>
+    </div>
+
+    <!-- Food Items Section -->
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.6rem; font-weight: 700;">My Menu</h3>
+            <a href="{% url 'chef:home' %}" style="color: var(--primary); font-weight: 600; text-decoration: none;">View Public Menu <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </div>
+        
+        {% if food_items %}
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+                {% for food in food_items %}
+                <div style="border: 1px solid var(--border); border-radius: 20px; overflow: hidden; background: var(--white); box-shadow: var(--shadow-sm); transition: var(--transition);" class="hover-card">
+                    <div style="position: relative; width: 100%; padding-top: 65%;">
+                        {% if food.image %}
+                            <img src="{{ food.image.url }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--light); display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-image" style="color: var(--gray); font-size: 2rem;"></i>
+                            </div>
+                        {% endif %}
+                        <span class="badge" style="position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.95); color: var(--primary); font-weight: 700;">{{ food.category }}</span>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <h4 style="margin: 0 0 0.5rem; font-size: 1.3rem; font-weight: 700;">{{ food.name }}</h4>
+                        <p style="color: var(--primary); font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem;">₹{{ food.price }}</p>
+                        <div style="display: flex; gap: 0.8rem;">
+                            <a href="{% url 'chef:edit_food' food.id %}" class="btn btn-outline" style="padding: 0.6rem; font-size: 0.9rem; flex: 1; border-radius: 12px;">
+                                <i class="fa-solid fa-pen"></i> Edit
+                            </a>
+                            <a href="{% url 'chef:delete_food' food.id %}" class="btn" style="padding: 0.6rem; font-size: 0.9rem; flex: 1; border-radius: 12px; background: #fff1f1; color: #ff4757; border: 1px solid #ff475733;">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 4rem; background: var(--white); border-radius: 24px; border: 2px dashed var(--border);">
+                <div style="width: 80px; height: 80px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                    <i class="fa-solid fa-utensils" style="font-size: 2.5rem; color: var(--primary);"></i>
+                </div>
+                <h4 style="font-size: 1.4rem;">No dishes added yet</h4>
+                <p style="color: var(--dark-light); margin-bottom: 1.5rem;">Start adding your delicious recipes to reach more customers.</p>
+                <a href="{% url 'chef:add_food' %}" class="btn btn-primary">Add Your First Dish</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md) !important;
+    }
+</style>
+{% endblock %}

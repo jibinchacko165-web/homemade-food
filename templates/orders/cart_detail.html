@@ -42,7 +42,7 @@
                         </td>
                         <td style="padding: 1.5rem; font-weight: 700; color: var(--dark);">₹{{ item.total }}</td>
                         <td style="padding: 1.5rem; text-align: center;">
-                            <a href="{% url 'remove_from_cart' item.food.id %}" style="color: var(--primary); text-decoration: none; width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,107,107,0.1); transition: var(--transition);" title="Remove Item">
+                            <a href="{% url 'orders:remove_from_cart' item.food.id %}" style="color: var(--primary); text-decoration: none; width: 35px; height: 35px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,107,107,0.1); transition: var(--transition);" title="Remove Item">
                                 <i class="fa-solid fa-trash-can"></i>
                             </a>
                         </td>
@@ -58,14 +58,28 @@
                 <span style="font-size: clamp(1.5rem, 6vw, 2rem); font-weight: 800; color: var(--primary);">₹{{ total_price }}</span>
             </div>
             
-            <div style="display: flex; flex-wrap: wrap; gap: 1rem; width: 100%; justify-content: flex-end;">
-                <a href="{% url 'chef:home' %}" class="btn btn-outline" style="flex: 1; min-width: 200px; white-space: nowrap;">
-                    <i class="fa-solid fa-arrow-left"></i> Continue Shopping
-                </a>
-                <a href="{% url 'checkout' %}" class="btn btn-primary" style="flex: 1; min-width: 200px; font-size: 1.1rem; white-space: nowrap;">
-                    Checkout <i class="fa-solid fa-credit-card" style="margin-left: 0.5rem;"></i>
-                </a>
-            </div>
+            <form action="{% url 'orders:checkout' %}" method="post" style="width: 100%;">
+                {% csrf_token %}
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: flex-end;">
+                    <div style="display: flex; flex-direction: column; text-align: left;">
+                        <label for="delivery_date" style="font-size: 0.9rem; color: var(--dark-light); font-weight: 600; margin-bottom: 0.3rem;">Delivery Date</label>
+                        <input type="date" id="delivery_date" name="delivery_date" required style="padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border); font-family: inherit;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; text-align: left;">
+                        <label for="delivery_time" style="font-size: 0.9rem; color: var(--dark-light); font-weight: 600; margin-bottom: 0.3rem;">Delivery Time</label>
+                        <input type="time" id="delivery_time" name="delivery_time" required style="padding: 0.8rem; border-radius: 12px; border: 1px solid var(--border); font-family: inherit;">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; width: 100%; justify-content: flex-end;">
+                    <a href="{% url 'chef:home' %}" class="btn btn-outline" style="flex: 1; min-width: 200px; white-space: nowrap;">
+                        <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                    </a>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 200px; font-size: 1.1rem; white-space: nowrap; border: none; cursor: pointer;">
+                        Checkout <i class="fa-solid fa-credit-card" style="margin-left: 0.5rem;"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     {% else %}
         <div style="text-align: center; padding: 4rem 0;">
