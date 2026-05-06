@@ -103,13 +103,18 @@ DB_HOST     = config('DB_HOST',     default='localhost')
 DB_PORT     = config('DB_PORT',     default='3306')
 
 if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.parse(
+    _db = dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=config('DB_CONN_MAX_AGE', default=600, cast=int),
-            ssl_require=not DEBUG,
+            ssl_require=False,  # Don't use sslmode — not MySQL compatible
         )
-    }
+    # TiDB Cloud Serverless requires SSL — inject OPTIONS for PyMySQL
+    _db.setdefault('OPTIONS', {})
+    _db['OPTIONS']['ssl'] = {'ssl_verify_cert': False}
+    # Remove sslmode key if dj_database_url added it (PostgreSQL-only param)
+    _db.pop('sslmode', None)
+    _db.get('OPTIONS', {}).pop('sslmode', None)
+    DATABASES = {'default': _db}
 elif DB_ENGINE == 'django.db.backends.mysql':
     DATABASES = {
         'default': {
@@ -190,15 +195,19 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False  # Must be False so JS can read CSRF token in forms
 
+
 # ---------------------------------------------------------------------------
-# Logging
+# Logging — console always; file only when the logs/ dir exists (local dev)
 # ---------------------------------------------------------------------------
+_LOG_DIR = os.path.join(BASE_DIR, 'logs')
+_USE_FILE_LOG = os.path.isdir(_LOG_DIR)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
         'simple': {
@@ -206,30 +215,28 @@ LOGGING = {
             'style': '{',
         },
     },
-    'filters': {
-        'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'},
-        'require_debug_true':  {'()': 'django.utils.log.RequireDebugTrue'},
-    },
     'handlers': {
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'formatter': 'verbose',
-        },
+        **({
+            'file': {
+                'level': 'ERROR',
+                'class': 'logging.FileHandler',
+                'filename': os.path.join(_LOG_DIR, 'django.log'),
+                'formatter': 'verbose',
+            }
+        } if _USE_FILE_LOG else {}),
     },
     'root': {
-        'handlers': ['console', 'file'],
+        'handlers': ['console', 'file'] if _USE_FILE_LOG else ['console'],
         'level': 'INFO',
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'file'] if _USE_FILE_LOG else ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': False,
         },
