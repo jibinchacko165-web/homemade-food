@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Homemade Food{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; min-height: 75vh; padding: 2rem;">
+    <div class="card" style="width: 100%; max-width: 480px; padding: 3.5rem 3rem; border-radius: 32px; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 220, 0.9) 100%); backdrop-filter: blur(20px);">
+        <!-- Warm lighting effects -->
+        <div style="position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(40px);"></div>
+        <div style="position: absolute; bottom: -70px; left: -70px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(210, 105, 30, 0.1) 0%, rgba(139, 69, 19, 0.08) 50%, transparent 70%); border-radius: 50%; filter: blur(45px);"></div>
+
+        <div style="text-align: center; margin-bottom: 3rem; position: relative; z-index: 1;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(210, 105, 30, 0.1) 0%, rgba(244, 164, 96, 0.15) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 8px 24px rgba(210, 105, 30, 0.15);">
+                <i class="fa-solid fa-kitchen-set" style="font-size: 2rem; color: var(--primary); filter: drop-shadow(0 2px 4px rgba(210, 105, 30, 0.2));"></i>
+            </div>
+            <h2 style="font-weight: 900; font-size: 2.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Welcome Back, Chef!</h2>
+            <p style="color: var(--dark-light); font-size: 1.1rem; font-weight: 500;">Login to access your favorite homemade dishes</p>
+        </div>
+
+        <form method="post" style="position: relative; z-index: 1;">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="{{ field.id_for_label }}" style="font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; display: block;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div style="color: var(--warm-orange); font-size: 0.9rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem; font-weight: 500;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> {{ field.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1.2rem; font-size: 1.2rem; font-weight: 700; box-shadow: 0 8px 25px rgba(210, 105, 30, 0.3);">
+                <i class="fa-solid fa-utensils"></i> Enter the Kitchen
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 2.5rem; font-size: 1rem; color: var(--dark-light); position: relative; z-index: 1;">
+            New to our kitchen? <a href="{% url 'customers:register' %}" style="color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); border-bottom: 2px solid transparent; padding-bottom: 0.1rem;">Join as a Chef</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    .form-group input {
+        width: 100%;
+        padding: 1rem 1.2rem;
+        border: 2px solid rgba(244, 164, 96, 0.3);
+        border-radius: 16px;
+        font-size: 1rem;
+        background: rgba(255, 248, 220, 0.5);
+        transition: var(--transition);
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+        transform: translateY(-2px);
+    }
+
+    .form-group input::placeholder {
+        color: var(--dark-light);
+        opacity: 0.7;
+    }
+</style>
+{% endblock %}

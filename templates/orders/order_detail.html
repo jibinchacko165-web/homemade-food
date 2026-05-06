@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 2rem auto; padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-lg);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px dashed var(--border); padding-bottom: 1.5rem;">
+        <div>
+            <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 0.5rem;">Order #{{ order.id }}</h2>
+            <span style="color: var(--dark-light);"><i class="fa-regular fa-calendar"></i> {{ order.created_at|date:"F d, Y, g:i a" }}</span>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge {% if order.status == 'Pending' %}badge-pending{% elif order.status == 'Completed' %}badge-completed{% else %}badge-cancelled{% endif %}" style="font-size: 1rem; padding: 0.5rem 1rem;">
+                {{ order.status }}
+            </span>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem; color: var(--dark);">Order Items</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tbody>
+                {% for item in order.items.all %}
+                <tr style="border-bottom: 1px solid rgba(0,0,0,0.05);">
+                    <td style="padding: 1rem 0;">
+                        <span style="font-weight: 700; background: var(--light); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">{{ item.quantity }}x</span>
+                        <span style="font-weight: 500; color: var(--dark);">{{ item.food_item.name }}</span>
+                    </td>
+                    <td style="padding: 1rem 0; text-align: right; color: var(--dark-light);">
+                        ₹{{ item.price }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="padding: 1.5rem 0; font-size: 1.2rem; font-weight: 700; color: var(--dark);">Total Amount</td>
+                    <td style="padding: 1.5rem 0; text-align: right; font-size: 1.5rem; font-weight: 800; color: var(--primary);">₹{{ order.total_price }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="{% url 'order_history' %}" class="btn btn-outline"><i class="fa-solid fa-arrow-left"></i> Back to History</a>
+    </div>
+</div>
+{% endblock %}

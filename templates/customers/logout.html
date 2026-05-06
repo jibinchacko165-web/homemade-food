@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 4rem auto; padding: 3rem; border-radius: 24px; box-shadow: var(--shadow-lg); text-align: center;">
+    <div style="width: 80px; height: 80px; background: rgba(78,205,196,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+        <i class="fa-solid fa-check" style="font-size: 2.5rem; color: var(--secondary);"></i>
+    </div>
+    <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 1rem;">Logged Out</h2>
+    <p style="color: var(--dark-light); font-size: 1.1rem; margin-bottom: 2rem;">You have been successfully logged out of your account.</p>
+    
+    <a href="{% url 'customers:login' %}" class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1.1rem;">Login Again</a>
+</div>
+{% endblock %}

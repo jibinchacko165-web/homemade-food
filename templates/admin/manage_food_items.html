@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Food Items - Homemade Food{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="section-header">
+        <h1 class="section-title">Manage Food Items</h1>
+        <p class="section-subtitle">Review and control availability of all menu items.</p>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Food Item</th>
+                        <th>Chef</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for food in foods %}
+                    <tr>
+                        <td>{{ food.id }}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                {% if food.image %}
+                                <img src="{{ food.image.url }}" style="width: 40px; height: 40px; border-radius: 8px; object-fit: cover;">
+                                {% endif %}
+                                {{ food.name }}
+                            </div>
+                        </td>
+                        <td>{{ food.chef.username }}</td>
+                        <td>₹{{ food.price }}</td>
+                        <td>{{ food.category }}</td>
+                        <td>
+                            {% if food.is_available %}
+                            <span class="badge badge-completed">Available</span>
+                            {% else %}
+                            <span class="badge badge-cancelled">Unavailable</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="{% url 'admin:toggle_food_availability' food.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn {% if food.is_available %}btn-outline{% else %}btn-primary{% endif %}" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+                                    {% if food.is_available %}Mark Unavailable{% else %}Mark Available{% endif %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center;">No food items found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
