@@ -5,9 +5,11 @@
     <div style="width: 100%; height: clamp(200px, 40vw, 300px); background: var(--light); position: relative;">
         {% if food.image %}
             <img src="{{ food.image.url }}" style="width: 100%; height: 100%; object-fit: cover;">
+        {% elif food.image_url %}
+            <img src="{{ food.image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
         {% else %}
             <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                <i class="fa-solid fa-image" style="font-size: 4rem; color: var(--gray);"></i>
+                <i class="fa-solid fa-utensils" style="font-size: 4rem; color: var(--gray);"></i>
             </div>
         {% endif %}
     </div>
