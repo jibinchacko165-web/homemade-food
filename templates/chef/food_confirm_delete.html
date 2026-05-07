@@ -10,7 +10,7 @@
     
     <form method="post" style="display: flex; gap: 1rem;">
         {% csrf_token %}
-        <a href="{% url 'seller_dashboard' %}" class="btn btn-outline" style="flex: 1;">Cancel</a>
+        <a href="{% url 'chef:dashboard' %}" class="btn btn-outline" style="flex: 1;">Cancel</a>
         <button type="submit" class="btn btn-primary" style="flex: 1; background: var(--primary);">Yes, Delete</button>
     </form>
 </div>
