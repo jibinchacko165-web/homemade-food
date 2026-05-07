@@ -28,19 +28,30 @@ def get_current_category():
 
 
 def food_list(request):
-    """Display available food items for current meal time"""
-    category, time_message = get_current_category()
-    if category:
-        foods = FoodItem.objects.filter(is_available=True, category=category)
-    else:
-        foods = FoodItem.objects.none()
+    """Display food items — filtered by selected category tab (default = current time)"""
+    auto_category, time_message = get_current_category()
 
-    is_admin = request.user.is_authenticated and (request.user.is_superuser or request.user.role == 'admin')
+    # Allow the user to override the category via GET param
+    selected = request.GET.get('category', auto_category or 'All')
+    if selected not in ('All', 'Breakfast', 'Lunch', 'Snacks', 'Dinner'):
+        selected = auto_category or 'All'
+
+    if selected == 'All':
+        foods = FoodItem.objects.filter(is_available=True).order_by('category', 'name')
+    else:
+        foods = FoodItem.objects.filter(is_available=True, category=selected)
+
+    all_categories = ['All', 'Breakfast', 'Lunch', 'Snacks', 'Dinner']
+    is_admin = request.user.is_authenticated and (
+        request.user.is_superuser or request.user.role == 'admin'
+    )
 
     return render(request, 'chef/food_list.html', {
         'foods': foods,
         'time_message': time_message,
-        'current_category': category,
+        'current_category': auto_category,   # actual time-based category
+        'selected_category': selected,        # what's currently displayed
+        'all_categories': all_categories,
         'is_admin': is_admin,
     })
 

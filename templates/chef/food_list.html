@@ -2,158 +2,229 @@
 
 {% block content %}
 
-
-<div class="hero" style="text-align: center; margin-bottom: 4rem; padding: clamp(3rem, 10vw, 6rem) clamp(1rem, 5vw, 3rem); background: linear-gradient(135deg, rgba(222, 184, 135, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, rgba(255, 215, 0, 0.08) 100%); border-radius: 32px; position: relative; overflow: hidden; box-shadow: inset 0 0 50px rgba(210, 105, 30, 0.05);">
-    <!-- Natural lighting effects -->
+<!-- Hero Section -->
+<div class="hero" style="text-align: center; margin-bottom: 2.5rem; padding: clamp(2.5rem, 8vw, 5rem) clamp(1rem, 5vw, 3rem); background: linear-gradient(135deg, rgba(222, 184, 135, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, rgba(255, 215, 0, 0.08) 100%); border-radius: 32px; position: relative; overflow: hidden; box-shadow: inset 0 0 50px rgba(210, 105, 30, 0.05);">
+    <!-- Lighting effects -->
     <div style="position: absolute; top: -60px; left: -60px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, rgba(255, 127, 80, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(40px); animation: float 6s ease-in-out infinite;"></div>
     <div style="position: absolute; bottom: -80px; right: -80px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(244, 164, 96, 0.15) 0%, rgba(210, 105, 30, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(50px); animation: float 8s ease-in-out infinite reverse;"></div>
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 248, 220, 0.3) 0%, rgba(245, 222, 179, 0.2) 40%, transparent 70%); border-radius: 50%; filter: blur(60px);"></div>
 
-    <h1 style="font-size: clamp(2rem, 8vw, 4rem); font-weight: 900; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -1px; position: relative; z-index: 1; text-shadow: 0 4px 8px rgba(210, 105, 30, 0.2);">
+    <h1 style="font-size: clamp(2rem, 7vw, 3.5rem); font-weight: 900; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; letter-spacing: -1px; position: relative; z-index: 1;">
         Fresh <span style="color: var(--warm-orange);">Homemade</span> Delights
     </h1>
-    <div style="display: inline-block; background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 248, 220, 0.8) 100%); padding: 0.8rem 2rem; border-radius: 50px; box-shadow: var(--shadow-warm); margin-bottom: 2rem; position: relative; z-index: 1; backdrop-filter: blur(10px); border: 1px solid rgba(244, 164, 96, 0.3);">
-        <span style="font-weight: 700; color: var(--primary); font-size: clamp(1rem, 3vw, 1.3rem);"><i class="fa-solid fa-kitchen-set" style="margin-right: 0.5rem;"></i>{{ time_message }}</span>
+    <div style="display: inline-block; background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,248,220,0.8) 100%); padding: 0.7rem 1.8rem; border-radius: 50px; box-shadow: var(--shadow-warm); margin-bottom: 1.5rem; position: relative; z-index: 1; border: 1px solid rgba(244,164,96,0.3);">
+        <span style="font-weight: 700; color: var(--primary); font-size: clamp(0.9rem, 2.5vw, 1.2rem);">
+            <i class="fa-solid fa-kitchen-set" style="margin-right: 0.5rem;"></i>{{ time_message }}
+        </span>
     </div>
-    <p style="font-size: clamp(1rem, 4vw, 1.4rem); color: var(--dark); max-width: 700px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.6; font-weight: 500;">
+    <p style="font-size: clamp(0.95rem, 3vw, 1.2rem); color: var(--dark); max-width: 650px; margin: 0 auto; position: relative; z-index: 1; line-height: 1.6; font-weight: 500;">
         {% if current_category %}
             <i class="fa-solid fa-heart" style="color: var(--warm-orange); margin-right: 0.5rem;"></i>
-            Savor our chef's special {{ current_category|lower }} creations! Made with love, served fresh from our kitchen to your table.
+            Savor our chef's special {{ current_category|lower }} creations — made with love!
         {% else %}
             <i class="fa-solid fa-moon" style="color: var(--secondary); margin-right: 0.5rem;"></i>
-            Our kitchen is resting now. We serve Breakfast (6AM-12PM), Lunch (12PM-3:30PM), Snacks (3:30PM-6:30PM) and Dinner (6:30PM-10PM).
+            Browse our full menu below. Kitchen opens at 6 AM for Breakfast!
         {% endif %}
     </p>
 </div>
 
+<!-- ── Category Tabs ─────────────────────────────────────────── -->
+<div style="display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem;">
+    {% for cat in all_categories %}
+        {% if cat == 'All' %}
+            {% with icon="fa-border-all" %}
+            <a href="?category={{ cat }}"
+               style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.25s ease;
+                      {% if selected_category == cat %}
+                        background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(210,105,30,0.35);
+                      {% else %}
+                        background: rgba(255,248,220,0.8); color: var(--primary); border: 2px solid rgba(244,164,96,0.4);
+                      {% endif %}">
+                <i class="fa-solid {{ icon }}"></i> {{ cat }}
+            </a>
+            {% endwith %}
+        {% elif cat == 'Breakfast' %}
+            {% with icon="fa-sun" %}
+            <a href="?category={{ cat }}"
+               style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.25s ease; position: relative;
+                      {% if selected_category == cat %}
+                        background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(210,105,30,0.35);
+                      {% else %}
+                        background: rgba(255,248,220,0.8); color: var(--primary); border: 2px solid rgba(244,164,96,0.4);
+                      {% endif %}">
+                <i class="fa-solid {{ icon }}"></i> {{ cat }}
+                {% if current_category == cat %}<span style="position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; border: 2px solid white;"></span>{% endif %}
+            </a>
+            {% endwith %}
+        {% elif cat == 'Lunch' %}
+            {% with icon="fa-utensils" %}
+            <a href="?category={{ cat }}"
+               style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.25s ease; position: relative;
+                      {% if selected_category == cat %}
+                        background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(210,105,30,0.35);
+                      {% else %}
+                        background: rgba(255,248,220,0.8); color: var(--primary); border: 2px solid rgba(244,164,96,0.4);
+                      {% endif %}">
+                <i class="fa-solid {{ icon }}"></i> {{ cat }}
+                {% if current_category == cat %}<span style="position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; border: 2px solid white;"></span>{% endif %}
+            </a>
+            {% endwith %}
+        {% elif cat == 'Snacks' %}
+            {% with icon="fa-cookie-bite" %}
+            <a href="?category={{ cat }}"
+               style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.25s ease; position: relative;
+                      {% if selected_category == cat %}
+                        background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(210,105,30,0.35);
+                      {% else %}
+                        background: rgba(255,248,220,0.8); color: var(--primary); border: 2px solid rgba(244,164,96,0.4);
+                      {% endif %}">
+                <i class="fa-solid {{ icon }}"></i> {{ cat }}
+                {% if current_category == cat %}<span style="position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; border: 2px solid white;"></span>{% endif %}
+            </a>
+            {% endwith %}
+        {% elif cat == 'Dinner' %}
+            {% with icon="fa-moon" %}
+            <a href="?category={{ cat }}"
+               style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: all 0.25s ease; position: relative;
+                      {% if selected_category == cat %}
+                        background: linear-gradient(135deg, var(--primary), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(210,105,30,0.35);
+                      {% else %}
+                        background: rgba(255,248,220,0.8); color: var(--primary); border: 2px solid rgba(244,164,96,0.4);
+                      {% endif %}">
+                <i class="fa-solid {{ icon }}"></i> {{ cat }}
+                {% if current_category == cat %}<span style="position: absolute; top: -4px; right: -4px; width: 10px; height: 10px; background: #22c55e; border-radius: 50%; border: 2px solid white;"></span>{% endif %}
+            </a>
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Current time indicator note -->
+{% if current_category %}
+<p style="text-align: center; margin: -1.5rem 0 2rem; font-size: 0.85rem; color: var(--dark-light);">
+    <span style="display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(34,197,94,0.1); color: #16a34a; padding: 0.3rem 0.9rem; border-radius: 50px; font-weight: 600; border: 1px solid rgba(34,197,94,0.3);">
+        <span style="width: 7px; height: 7px; background: #22c55e; border-radius: 50%; display: inline-block;"></span>
+        Now serving: {{ current_category }} — <a href="?category={{ current_category }}" style="color: #16a34a; text-decoration: underline;">Switch to it</a>
+    </span>
+</p>
+{% endif %}
+
+<!-- ── Food Grid ─────────────────────────────────────────────── -->
 <div class="responsive-grid">
     {% for food in foods %}
-    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 24px; border: none; box-shadow: var(--shadow-warm); position: relative; background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 220, 0.9) 100%); backdrop-filter: blur(10px); transition: var(--transition); transform: translateY(0);">
-        <!-- Warm lighting effect -->
-        <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, rgba(244, 164, 96, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(15px); z-index: 1;"></div>
+    <div class="card" style="padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 24px; border: none; box-shadow: var(--shadow-warm); position: relative; background: linear-gradient(145deg, rgba(255,255,255,0.95) 0%, rgba(255,248,220,0.9) 100%); backdrop-filter: blur(10px); transition: var(--transition); transform: translateY(0);">
 
-        <a href="{% url 'chef:food_detail' food.id %}" style="display: block; position: relative; overflow: hidden; width: 100%; padding-top: 75%; text-decoration: none; border-radius: 24px 24px 0 0;"> <!-- 4:3 Aspect Ratio for responsive images -->
+        <!-- Image / placeholder -->
+        <a href="{% url 'chef:food_detail' food.id %}" style="display: block; position: relative; overflow: hidden; width: 100%; padding-top: 70%; text-decoration: none; border-radius: 24px 24px 0 0;">
             {% if food.image %}
-                <img src="{{ food.image.url }}" alt="{{ food.name }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); filter: brightness(1.05) contrast(1.05);">
+                <img src="{{ food.image.url }}" alt="{{ food.name }}"
+                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25,0.8,0.25,1);"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg,#fdf5e6,#f5deb3,#deb887); align-items: center; justify-content: center; color: var(--primary);">
+                    <i class="fa-solid fa-utensils" style="font-size: 3.5rem; opacity: 0.6;"></i>
+                </div>
             {% elif food.image_url %}
-                <img src="{{ food.image_url }}" alt="{{ food.name }}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); filter: brightness(1.05) contrast(1.05);">
+                <img src="{{ food.image_url }}" alt="{{ food.name }}"
+                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25,0.8,0.25,1);"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg,#fdf5e6,#f5deb3,#deb887); align-items: center; justify-content: center; color: var(--primary);">
+                    <i class="fa-solid fa-utensils" style="font-size: 3.5rem; opacity: 0.6;"></i>
+                </div>
             {% else %}
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, #fdf5e6, #f5deb3, #deb887); display: flex; align-items: center; justify-content: center; color: var(--primary); transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);">
-                    <i class="fa-solid fa-utensils" style="font-size: 4rem; opacity: 0.6; filter: drop-shadow(0 4px 8px rgba(210, 105, 30, 0.2));"></i>
+                <!-- Beautiful placeholder when no image is set -->
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #fdf5e6 0%, #f5deb3 50%, #deb887 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary);">
+                    {% if food.category == 'Breakfast' %}
+                        <i class="fa-solid fa-sun" style="font-size: 3.5rem; opacity: 0.5; color: #f59e0b;"></i>
+                    {% elif food.category == 'Lunch' %}
+                        <i class="fa-solid fa-bowl-food" style="font-size: 3.5rem; opacity: 0.5;"></i>
+                    {% elif food.category == 'Snacks' %}
+                        <i class="fa-solid fa-cookie-bite" style="font-size: 3.5rem; opacity: 0.5; color: #d97706;"></i>
+                    {% else %}
+                        <i class="fa-solid fa-moon" style="font-size: 3.5rem; opacity: 0.5; color: #7c3aed;"></i>
+                    {% endif %}
+                    <span style="font-size: 0.8rem; font-weight: 600; margin-top: 0.5rem; opacity: 0.5;">{{ food.category }}</span>
                 </div>
             {% endif %}
-            <div style="position: absolute; top: 1.5rem; right: 1.5rem; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 220, 0.9) 100%); padding: 0.6rem 1.2rem; border-radius: 50px; font-weight: 800; color: var(--primary); backdrop-filter: blur(8px); box-shadow: 0 6px 16px rgba(210, 105, 30, 0.2); border: 1px solid rgba(244, 164, 96, 0.3); font-size: 1.1rem;">
+
+            <!-- Price badge -->
+            <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.95); padding: 0.45rem 1rem; border-radius: 50px; font-weight: 800; color: var(--primary); box-shadow: 0 4px 12px rgba(210,105,30,0.2); font-size: 1rem; z-index: 2;">
                 ₹{{ food.price }}
             </div>
-            <!-- Hover effects -->
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(transparent 0%, rgba(210, 105, 30, 0.1) 100%); opacity: 0; transition: opacity 0.4s ease;"></div>
+
+            <!-- Category badge -->
+            <div style="position: absolute; top: 1rem; left: 1rem; background: {% if food.category == 'Breakfast' %}rgba(251,191,36,0.9){% elif food.category == 'Lunch' %}rgba(239,68,68,0.85){% elif food.category == 'Snacks' %}rgba(245,158,11,0.9){% else %}rgba(99,102,241,0.85){% endif %}; padding: 0.3rem 0.8rem; border-radius: 50px; font-weight: 700; color: white; font-size: 0.75rem; z-index: 2; letter-spacing: 0.03em;">
+                {{ food.category }}
+            </div>
         </a>
 
-        <div style="padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; background: transparent; position: relative; z-index: 2;">
+        <!-- Card body -->
+        <div style="padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column;">
             <a href="{% url 'chef:food_detail' food.id %}" style="text-decoration: none;">
-                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--dark); line-height: 1.3; transition: color 0.3s ease;">{{ food.name }}</h3>
+                <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--dark); line-height: 1.3; transition: color 0.3s ease;">{{ food.name }}</h3>
             </a>
 
-            <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; color: var(--dark-light); font-size: 1rem;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(210, 105, 30, 0.3);">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; color: var(--dark-light); font-size: 0.9rem;">
+                <div style="width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.8rem; flex-shrink: 0;">
                     {{ food.chef.username|first|upper }}
                 </div>
                 <div>
-                    <span style="font-weight: 600; color: var(--primary);">Chef {{ food.chef.username }}</span>
-                    <div style="font-size: 0.85rem; color: var(--dark-light); margin-top: 0.1rem;">
-                        <i class="fa-solid fa-star" style="color: #ffd700; margin-right: 0.2rem;"></i>
-                        Homemade with Love
+                    <span style="font-weight: 600; color: var(--primary);">Chef {{ food.chef.get_full_name|default:food.chef.username }}</span>
+                    <div style="font-size: 0.78rem; color: var(--dark-light);">
+                        <i class="fa-solid fa-clock" style="margin-right: 0.2rem;"></i>{{ food.preparation_time }} min
+                        &nbsp;·&nbsp;
+                        <i class="fa-solid fa-star" style="color: #fbbf24; margin-right: 0.2rem;"></i>{{ food.rating }}
                     </div>
                 </div>
             </div>
 
-            <p style="color: var(--dark-light); margin-bottom: 2rem; flex-grow: 1; font-size: 1rem; line-height: 1.6; font-weight: 400;">{{ food.description|truncatewords:20 }}</p>
+            <p style="color: var(--dark-light); margin-bottom: 1.5rem; flex-grow: 1; font-size: 0.95rem; line-height: 1.6;">{{ food.description|truncatewords:18 }}</p>
 
             {% if user.is_authenticated %}
-                <a href="{% url 'orders:add_to_cart' food.id %}" class="btn btn-primary" style="text-align: center; width: 100%; justify-content: center; font-size: 1.1rem; padding: 1rem 2rem; box-shadow: 0 8px 25px rgba(210, 105, 30, 0.3);">
+                <a href="{% url 'orders:add_to_cart' food.id %}" class="btn btn-primary" style="text-align: center; width: 100%; justify-content: center; font-size: 1rem; padding: 0.85rem 1.5rem; box-shadow: 0 6px 20px rgba(210,105,30,0.25);">
                     <i class="fa-solid fa-cart-plus"></i> Add to Cart
                 </a>
             {% else %}
-                <a href="{% url 'customers:login' %}" class="btn btn-outline" style="text-align: center; width: 100%; justify-content: center; font-size: 1.1rem; padding: 1rem 2rem;">
+                <a href="{% url 'customers:login' %}" class="btn btn-outline" style="text-align: center; width: 100%; justify-content: center; font-size: 1rem; padding: 0.85rem 1.5rem;">
                     <i class="fa-solid fa-heart"></i> Login to Order
                 </a>
             {% endif %}
         </div>
-
-        <!-- Card hover effects -->
-        <style>
-            .card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 20px 40px rgba(210, 105, 30, 0.15);
-            }
-            .card:hover img {
-                transform: scale(1.08);
-            }
-            .card:hover .card img + div {
-                opacity: 1;
-            }
-            .card:hover h3 {
-                color: var(--primary);
-            }
-            .card:hover div:last-child div:last-child {
-                opacity: 1;
-            }
-            @keyframes float {
-                0%, 100% { transform: translateY(0px) rotate(0deg); }
-                50% { transform: translateY(-10px) rotate(5deg); }
-            }
-        </style>
     </div>
     {% empty %}
-    <div style="grid-column: 1 / -1; text-align: center; padding: 6rem 3rem; color: var(--dark-light); background: linear-gradient(135deg, rgba(255, 248, 220, 0.8) 0%, rgba(245, 222, 179, 0.6) 100%); border-radius: 32px; box-shadow: var(--shadow-warm); position: relative; overflow: hidden; backdrop-filter: blur(10px); border: 1px solid rgba(244, 164, 96, 0.2);">
-        <!-- Warm lighting for empty state -->
-        <div style="position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(244, 164, 96, 0.1) 50%, transparent 70%); border-radius: 50%; filter: blur(30px);"></div>
-        <div style="position: absolute; bottom: -50px; left: -50px; width: 150px; height: 150px; background: radial-gradient(circle, rgba(210, 105, 30, 0.1) 0%, rgba(139, 69, 19, 0.08) 50%, transparent 70%); border-radius: 50%; filter: blur(35px);"></div>
-
-        {% if current_category %}
-            <div style="position: relative; z-index: 1;">
-                <i class="fa-solid fa-utensils" style="font-size: 5rem; color: var(--primary); margin-bottom: 2rem; filter: drop-shadow(0 6px 12px rgba(210, 105, 30, 0.2)); animation: float 4s ease-in-out infinite;"></i>
-                <h2 style="font-size: 2.5rem; color: var(--dark); margin-bottom: 1rem; font-weight: 800;">Fresh {{ current_category|lower }} Coming Soon!</h2>
-                <p style="font-size: 1.3rem; color: var(--dark-light); max-width: 500px; margin: 0 auto; line-height: 1.6; font-weight: 500;">
-                    Our chefs are crafting something delicious just for you. Check back in a few minutes for the freshest {{ current_category|lower }} creations!
-                </p>
-                <div style="margin-top: 2rem;">
-                    <i class="fa-solid fa-clock" style="color: var(--accent); font-size: 1.5rem; margin-right: 0.5rem;"></i>
-                    <span style="color: var(--primary); font-weight: 600; font-size: 1.1rem;">Next serving: {{ time_message|lower }}</span>
-                </div>
-            </div>
-        {% else %}
-            <div style="position: relative; z-index: 1;">
-                <i class="fa-solid fa-moon" style="font-size: 5rem; color: var(--secondary); margin-bottom: 2rem; filter: drop-shadow(0 6px 12px rgba(139, 69, 19, 0.15)); animation: float 5s ease-in-out infinite;"></i>
-                <h2 style="font-size: 2.5rem; color: var(--dark); margin-bottom: 1rem; font-weight: 800;">Kitchen is Resting</h2>
-                <p style="font-size: 1.3rem; color: var(--dark-light); max-width: 500px; margin: 0 auto; line-height: 1.6; font-weight: 500;">
-                    Our kitchen hours are designed for the freshest experience. We serve Breakfast (6AM-12PM), Lunch (12PM-3:30PM), Snacks (3:30PM-6:30PM) and Dinner (6:30PM-10PM).
-                </p>
-                <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-sun" style="color: #ffd700; font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <div style="color: var(--primary); font-weight: 600;">Breakfast</div>
-                        <div style="color: var(--dark-light); font-size: 0.9rem;">6:00 AM - 12:00 PM</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-utensils" style="color: var(--warm-orange); font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <div style="color: var(--primary); font-weight: 600;">Lunch</div>
-                        <div style="color: var(--dark-light); font-size: 0.9rem;">12:00 PM - 3:30 PM</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-cookie-bite" style="color: var(--accent); font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <div style="color: var(--primary); font-weight: 600;">Snacks</div>
-                        <div style="color: var(--dark-light); font-size: 0.9rem;">3:30 PM - 6:30 PM</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <i class="fa-solid fa-moon" style="color: var(--secondary); font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                        <div style="color: var(--primary); font-weight: 600;">Dinner</div>
-                        <div style="color: var(--dark-light); font-size: 0.9rem;">6:30 PM - 10:00 PM</div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+    <!-- Empty state -->
+    <div style="grid-column: 1 / -1; text-align: center; padding: 5rem 2rem; color: var(--dark-light); background: linear-gradient(135deg, rgba(255,248,220,0.8), rgba(245,222,179,0.6)); border-radius: 32px; box-shadow: var(--shadow-warm); border: 1px solid rgba(244,164,96,0.2);">
+        <i class="fa-solid fa-utensils" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; opacity: 0.6;"></i>
+        <h2 style="font-size: 2rem; color: var(--dark); margin-bottom: 0.8rem; font-weight: 800;">
+            {% if selected_category == 'All' %}No food items yet!{% else %}No {{ selected_category }} items available{% endif %}
+        </h2>
+        <p style="font-size: 1.1rem; max-width: 450px; margin: 0 auto 1.5rem; line-height: 1.6;">
+            {% if selected_category == 'All' %}
+                Our chefs haven't added any items yet. Check back soon!
+            {% else %}
+                Try another category or check back later.
+            {% endif %}
+        </p>
+        <a href="?" class="btn btn-primary" style="display: inline-flex; gap: 0.5rem; align-items: center;">
+            <i class="fa-solid fa-border-all"></i> View All Menu
+        </a>
     </div>
     {% endfor %}
 </div>
+
+<style>
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(210, 105, 30, 0.15);
+    }
+    .card:hover img {
+        transform: scale(1.06);
+    }
+    .card:hover h3 {
+        color: var(--primary);
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+
 {% endblock %}
