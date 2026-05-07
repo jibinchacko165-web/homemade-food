@@ -106,13 +106,15 @@ def order_history(request):
     orders = Order.objects.filter(customer=request.user).order_by('-created_at')
     return render(request, 'orders/order_history.html', {'orders': orders})
 
-@user_passes_test(is_seller)
+@login_required
+@user_passes_test(is_seller, login_url='customers:login')
 def seller_orders(request):
     # Sellers see orders containing their foods
     orders = Order.objects.filter(items__food_item__chef=request.user).distinct().order_by('-created_at')
     return render(request, 'orders/seller_orders.html', {'orders': orders})
 
-@user_passes_test(is_seller)
+@login_required
+@user_passes_test(is_seller, login_url='customers:login')
 def update_order_status(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     if request.method == 'POST':
@@ -125,8 +127,9 @@ def update_order_status(request, order_id):
 @login_required
 def order_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
-    # Check permission
-    if order.customer != request.user and not request.user.is_chef:
+    # Allow: the customer who placed it, any chef, or any admin
+    is_admin = request.user.is_superuser or getattr(request.user, 'role', '') == 'admin'
+    if order.customer != request.user and not request.user.is_chef and not is_admin:
         return redirect('chef:home')
     return render(request, 'orders/order_detail.html', {'order': order})
 

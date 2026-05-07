@@ -106,7 +106,7 @@ def chef_menu(request):
 def add_food(request):
     if not is_chef(request.user):
         messages.error(request, 'Access denied.')
-        return redirect('home')
+        return redirect('chef:home')
     
     if request.method == 'POST':
         form = FoodItemForm(request.POST, request.FILES)
