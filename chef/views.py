@@ -151,15 +151,16 @@ def edit_food(request, pk):
 @login_required
 def delete_food(request, pk):
     food = get_object_or_404(FoodItem, pk=pk)
-    
+
     if food.chef != request.user:
         messages.error(request, 'You can only delete your own items.')
-        return redirect('chef:dashboard')
-    
+        return redirect('chef:menu')
+
     if request.method == 'POST':
         name = food.name
         food.delete()
-        messages.success(request, f'{name} deleted successfully!')
-        return redirect('chef:dashboard')
-    
-    return render(request, 'chef/food_confirm_delete.html', {'food': food})
+        messages.success(request, f'"{name}" deleted successfully!')
+        return redirect('chef:menu')
+
+    # GET request — just go back to menu (confirmation handled via JS in template)
+    return redirect('chef:menu')
