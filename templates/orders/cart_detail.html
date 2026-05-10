@@ -38,7 +38,11 @@
                         </td>
                         <td style="padding: 1.5rem; color: var(--dark-light);">₹{{ item.food.price }}</td>
                         <td style="padding: 1.5rem;">
-                            <span style="display: inline-block; padding: 0.3rem 0.8rem; background: var(--white); border-radius: 8px; border: 1px solid var(--border); font-weight: 600;">{{ item.quantity }}</span>
+                            <div style="display: inline-flex; align-items: center; background: var(--white); border-radius: 8px; border: 1px solid var(--border); overflow: hidden;">
+                                <a href="{% url 'orders:decrease_cart' item.food.id %}" style="padding: 0.4rem 0.8rem; color: var(--dark-light); text-decoration: none; border-right: 1px solid var(--border); transition: var(--transition);" onmouseover="this.style.background='var(--light)'; this.style.color='var(--primary)'" onmouseout="this.style.background='transparent'; this.style.color='var(--dark-light)'"><i class="fa-solid fa-minus"></i></a>
+                                <span style="padding: 0.4rem 1rem; font-weight: 700; color: var(--dark); min-width: 40px; text-align: center;">{{ item.quantity }}</span>
+                                <a href="{% url 'orders:add_to_cart' item.food.id %}" style="padding: 0.4rem 0.8rem; color: var(--dark-light); text-decoration: none; border-left: 1px solid var(--border); transition: var(--transition);" onmouseover="this.style.background='var(--light)'; this.style.color='var(--primary)'" onmouseout="this.style.background='transparent'; this.style.color='var(--dark-light)'"><i class="fa-solid fa-plus"></i></a>
+                            </div>
                         </td>
                         <td style="padding: 1.5rem; font-weight: 700; color: var(--dark);">₹{{ item.total }}</td>
                         <td style="padding: 1.5rem; text-align: center;">

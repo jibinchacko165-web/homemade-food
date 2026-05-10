@@ -55,6 +55,17 @@ def remove_from_cart(request, food_id):
     return redirect('orders:cart_detail')
 
 @login_required
+def decrease_cart(request, food_id):
+    cart = request.session.get('cart', {})
+    if str(food_id) in cart:
+        if cart[str(food_id)]['quantity'] > 1:
+            cart[str(food_id)]['quantity'] -= 1
+        else:
+            del cart[str(food_id)]
+        request.session['cart'] = cart
+    return redirect('orders:cart_detail')
+
+@login_required
 def checkout(request):
     if request.method != 'POST':
         return redirect('orders:cart_detail')
