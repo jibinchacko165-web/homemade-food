@@ -85,6 +85,7 @@ def chef_dashboard(request):
         'total_items': food_items.count(),
         'total_orders': orders.count(),
         'pending_orders': orders.filter(status='Pending').count(),
+        'recent_orders': recent_orders,
     }
     return render(request, 'chef/dashboard.html', context)
 
